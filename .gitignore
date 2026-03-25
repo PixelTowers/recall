@@ -1,0 +1,28 @@
+# ABOUTME: Git ignore rules for the Recall browser extension project.
+# ABOUTME: Excludes build artifacts, dependencies, and IDE files.
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# web-ext
+web-ext-artifacts/
+
+# Environment
+.env
+.env.local
+
+# Claude visual artifacts
+.claude-visual/
