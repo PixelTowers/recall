@@ -81,9 +81,17 @@ Alternatively, use the dev command which launches Firefox with the extension loa
 npm run dev
 ```
 
+### Test Page
+
+A local test page with various field types (text, email, date, select, textarea, checkboxes, radio buttons, etc.) is included in the repo:
+
+```sh
+open test-page.html
+```
+
 ### Test Flow
 
-1. Go to any page with a form (login page, search bar, contact form, etc.)
+1. Open `test-page.html` (or any page with a form)
 2. Fill in some fields
 3. Click the Recall icon in the toolbar, then **Save Current Form**
 4. Reload the page
