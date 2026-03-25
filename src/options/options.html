@@ -9,7 +9,44 @@
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <header class="header">
+      <h1 class="header__title">Recall Settings</h1>
+    </header>
+
+    <section class="settings-section">
+      <h2 class="settings-section__title">Auto-Save</h2>
+      <p class="settings-section__description">
+        Automatically save form data at regular intervals. Auto-saves
+        overwrite only the previous auto-save, never your manual saves.
+      </p>
+
+      <div class="setting">
+        <label class="setting__label" for="auto-save-toggle">
+          <span class="setting__text">Enable auto-save</span>
+          <input type="checkbox" id="auto-save-toggle" class="setting__checkbox">
+        </label>
+      </div>
+
+      <div class="setting" id="interval-setting">
+        <label class="setting__label" for="auto-save-interval">
+          <span class="setting__text">Save interval (seconds)</span>
+          <input
+            type="number"
+            id="auto-save-interval"
+            class="setting__input"
+            min="10"
+            max="300"
+            step="5"
+            value="30"
+          >
+        </label>
+      </div>
+    </section>
+
+    <div id="save-feedback" class="save-feedback" hidden>Settings saved</div>
+  </div>
+
   <script src="options.js" type="module"></script>
 </body>
 </html>
