@@ -1,0 +1,26 @@
+{
+  "name": "recall",
+  "version": "0.1.0",
+  "description": "Browser extension to save, restore, and export form data",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "web-ext lint --source-dir=src",
+    "build": "node build.js",
+    "build:chrome": "node build.js --target=chrome",
+    "build:firefox": "node build.js --target=firefox",
+    "dev": "web-ext run --source-dir=dist/firefox",
+    "package": "web-ext build --source-dir=dist/firefox --artifacts-dir=web-ext-artifacts"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.12.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "jsdom": "^25.0.0",
+    "vitest": "^2.1.0",
+    "web-ext": "^8.3.0"
+  }
+}
