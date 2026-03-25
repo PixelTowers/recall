@@ -2,7 +2,14 @@
 // ABOUTME: Uses esbuild to bundle JS modules and copies static assets to dist/.
 
 import { build } from "esbuild";
-import { cpSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import {
+  cpSync,
+  mkdirSync,
+  rmSync,
+  existsSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,12 +29,38 @@ const entryPoints = [
 ];
 
 const staticFiles = [
-  { src: "manifest.json", dest: "manifest.json" },
   { src: "src/popup/popup.html", dest: "popup/popup.html" },
   { src: "src/popup/popup.css", dest: "popup/popup.css" },
   { src: "src/options/options.html", dest: "options/options.html" },
   { src: "src/options/options.css", dest: "options/options.css" },
 ];
+
+/**
+ * Generates a browser-specific manifest from the base manifest.json.
+ */
+function generateManifest(target) {
+  const base = JSON.parse(
+    readFileSync(resolve(__dirname, "manifest.json"), "utf-8"),
+  );
+
+  if (target === "firefox") {
+    // Firefox MV3 uses "scripts" array instead of "service_worker"
+    base.background = {
+      scripts: ["background.js"],
+      type: "module",
+    };
+
+    // Firefox requires browser_specific_settings for extension ID
+    base.browser_specific_settings = {
+      gecko: {
+        id: "recall@pixeltowers.com",
+        strict_min_version: "109.0",
+      },
+    };
+  }
+
+  return base;
+}
 
 async function buildTarget(target) {
   const outdir = resolve(__dirname, `dist/${target}`);
@@ -49,9 +82,15 @@ async function buildTarget(target) {
     minify: process.argv.includes("--minify"),
     sourcemap: process.argv.includes("--sourcemap"),
     outExtension: { ".js": ".js" },
-    // Flatten output structure: popup/popup.js → popup.js in outdir subdirs
     outbase: "src",
   });
+
+  // Generate browser-specific manifest
+  const manifest = generateManifest(target);
+  writeFileSync(
+    resolve(outdir, "manifest.json"),
+    JSON.stringify(manifest, null, 2),
+  );
 
   // Copy static files
   for (const { src, dest } of staticFiles) {
