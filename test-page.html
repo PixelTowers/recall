@@ -1,0 +1,100 @@
+<!-- ABOUTME: Local test page with various form field types for testing Recall. -->
+<!-- ABOUTME: Open this file directly in the browser to test the extension. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recall Test Page</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; color: #333; }
+    h1 { color: #4A90D9; }
+    form { display: flex; flex-direction: column; gap: 16px; }
+    label { display: flex; flex-direction: column; gap: 4px; font-weight: 500; }
+    input, textarea, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    textarea { resize: vertical; min-height: 80px; }
+    fieldset { border: 1px solid #ddd; border-radius: 4px; padding: 12px; }
+    legend { font-weight: 600; }
+    .checkbox-group label, .radio-group label { flex-direction: row; align-items: center; gap: 8px; font-weight: normal; }
+    hr { margin: 24px 0; border: none; border-top: 1px solid #eee; }
+    p.hint { color: #888; font-size: 13px; margin-top: -8px; }
+  </style>
+</head>
+<body>
+  <h1>Recall Test Page</h1>
+  <p>Fill out this form, save it with Recall, reload the page, then restore it.</p>
+  <hr>
+
+  <form>
+    <label for="name">Full Name
+      <input id="name" type="text" placeholder="Jane Smith">
+    </label>
+
+    <label for="email">Email Address
+      <input id="email" type="email" placeholder="jane@example.com">
+    </label>
+
+    <label for="phone">Phone Number
+      <input id="phone" type="tel" placeholder="+1 555-0123">
+    </label>
+
+    <label for="website">Website
+      <input id="website" type="url" placeholder="https://example.com">
+    </label>
+
+    <label for="dob">Date of Birth
+      <input id="dob" type="date">
+    </label>
+
+    <label for="experience">Years of Experience
+      <input id="experience" type="number" min="0" max="50" placeholder="5">
+    </label>
+
+    <label for="role">Preferred Role
+      <select id="role">
+        <option value="">-- Select --</option>
+        <option value="frontend">Frontend Developer</option>
+        <option value="backend">Backend Developer</option>
+        <option value="fullstack">Full Stack Developer</option>
+        <option value="design">Designer</option>
+        <option value="pm">Product Manager</option>
+      </select>
+    </label>
+
+    <label for="cover">Cover Letter
+      <textarea id="cover" placeholder="Tell us about yourself..."></textarea>
+    </label>
+
+    <label for="search">How did you find us?
+      <input id="search" type="search" placeholder="Google, referral, etc.">
+    </label>
+
+    <fieldset>
+      <legend>Skills (check all that apply)</legend>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="skills" value="js"> JavaScript</label>
+        <label><input type="checkbox" name="skills" value="ts"> TypeScript</label>
+        <label><input type="checkbox" name="skills" value="react"> React</label>
+        <label><input type="checkbox" name="skills" value="node"> Node.js</label>
+        <label><input type="checkbox" name="skills" value="go"> Go</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Work Preference</legend>
+      <div class="radio-group">
+        <label><input type="radio" name="work_pref" value="remote"> Remote</label>
+        <label><input type="radio" name="work_pref" value="hybrid"> Hybrid</label>
+        <label><input type="radio" name="work_pref" value="onsite"> On-site</label>
+      </div>
+    </fieldset>
+
+    <label for="color">Favorite Color
+      <input id="color" type="color" value="#4A90D9">
+    </label>
+  </form>
+
+  <hr>
+  <p class="hint">This page is for testing Recall locally. It does not submit anywhere.</p>
+</body>
+</html>
