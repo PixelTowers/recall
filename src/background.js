@@ -5,6 +5,7 @@ import browser from "webextension-polyfill";
 import {
   getSnapshots,
   saveSnapshot,
+  saveAutoSnapshot,
   deleteSnapshot,
   getSettings,
   saveSettings,
@@ -51,6 +52,15 @@ async function handleMessage(message, sender) {
     case "saveSnapshot": {
       await saveSnapshot(payload.snapshot);
       // Update badge for the tab where the snapshot was saved
+      const tabId = sender.tab?.id || payload.tabId;
+      if (tabId) {
+        await updateBadge(tabId);
+      }
+      return { success: true };
+    }
+
+    case "saveAutoSnapshot": {
+      await saveAutoSnapshot(payload.snapshot);
       const tabId = sender.tab?.id || payload.tabId;
       if (tabId) {
         await updateBadge(tabId);

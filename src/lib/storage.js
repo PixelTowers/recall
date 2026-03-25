@@ -86,6 +86,26 @@ export async function deleteSnapshot(url, snapshotId) {
 }
 
 /**
+ * Saves an auto-save snapshot, replacing the previous auto-save for the same URL.
+ * Manual snapshots are never affected.
+ */
+export async function saveAutoSnapshot(snapshot) {
+  const all = await getAllSnapshots();
+  const normalized = normalizeUrl(snapshot.url);
+
+  if (!all[normalized]) {
+    all[normalized] = [];
+  }
+
+  // Remove any existing auto-save for this URL
+  all[normalized] = all[normalized].filter((s) => s.source !== "auto");
+
+  // Add the new auto-save
+  all[normalized].push(snapshot);
+  await browser.storage.local.set({ [SNAPSHOTS_KEY]: all });
+}
+
+/**
  * Returns the current settings, merged with defaults.
  */
 export async function getSettings() {

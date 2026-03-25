@@ -28,6 +28,7 @@ import {
   getAllSnapshots,
   getSnapshots,
   saveSnapshot,
+  saveAutoSnapshot,
   deleteSnapshot,
   getSettings,
   saveSettings,
@@ -159,6 +160,62 @@ describe("saveSnapshot", () => {
     expect(Object.keys(store.recall_snapshots)).toHaveLength(2);
     expect(store.recall_snapshots["https://a.com/form"]).toHaveLength(1);
     expect(store.recall_snapshots["https://b.com/form"]).toHaveLength(1);
+  });
+});
+
+describe("saveAutoSnapshot", () => {
+  beforeEach(clearStore);
+
+  it("saves an auto snapshot", async () => {
+    const snapshot = makeSnapshot({ source: "auto" });
+    await saveAutoSnapshot(snapshot);
+
+    expect(store.recall_snapshots["https://example.com/form"]).toHaveLength(1);
+    expect(store.recall_snapshots["https://example.com/form"][0].source).toBe("auto");
+  });
+
+  it("replaces the previous auto-save for the same URL", async () => {
+    const snap1 = makeSnapshot({ id: "auto-1", source: "auto", timestamp: 1 });
+    const snap2 = makeSnapshot({ id: "auto-2", source: "auto", timestamp: 2 });
+
+    await saveAutoSnapshot(snap1);
+    await saveAutoSnapshot(snap2);
+
+    const snapshots = store.recall_snapshots["https://example.com/form"];
+    expect(snapshots).toHaveLength(1);
+    expect(snapshots[0].id).toBe("auto-2");
+  });
+
+  it("does not affect manual snapshots", async () => {
+    const manual = makeSnapshot({ id: "manual-1", source: "manual" });
+    store.recall_snapshots = {
+      "https://example.com/form": [manual],
+    };
+
+    const auto = makeSnapshot({ id: "auto-1", source: "auto" });
+    await saveAutoSnapshot(auto);
+
+    const snapshots = store.recall_snapshots["https://example.com/form"];
+    expect(snapshots).toHaveLength(2);
+    expect(snapshots.find((s) => s.id === "manual-1")).toBeDefined();
+    expect(snapshots.find((s) => s.id === "auto-1")).toBeDefined();
+  });
+
+  it("replaces only auto-saves while preserving manual saves", async () => {
+    const manual = makeSnapshot({ id: "manual-1", source: "manual" });
+    const oldAuto = makeSnapshot({ id: "auto-old", source: "auto" });
+    store.recall_snapshots = {
+      "https://example.com/form": [manual, oldAuto],
+    };
+
+    const newAuto = makeSnapshot({ id: "auto-new", source: "auto" });
+    await saveAutoSnapshot(newAuto);
+
+    const snapshots = store.recall_snapshots["https://example.com/form"];
+    expect(snapshots).toHaveLength(2);
+    expect(snapshots.find((s) => s.id === "manual-1")).toBeDefined();
+    expect(snapshots.find((s) => s.id === "auto-new")).toBeDefined();
+    expect(snapshots.find((s) => s.id === "auto-old")).toBeUndefined();
   });
 });
 
