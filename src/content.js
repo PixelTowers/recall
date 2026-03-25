@@ -2,7 +2,10 @@
 // ABOUTME: Handles form field capture, value restoration, and auto-save.
 
 import browser from "webextension-polyfill";
-import { captureFields } from "./lib/fields.js";
+import { captureFields, detectFields } from "./lib/fields.js";
+
+let autoSaveTimer = null;
+let lastAutoSaveHash = null;
 
 /**
  * Captures the current form state and sends it to the background worker for storage.
@@ -117,5 +120,97 @@ function handleMessage(message) {
   }
 }
 
+/**
+ * Creates a simple hash of the current field values for change detection.
+ */
+function hashFieldValues(fields) {
+  return fields.map((f) => `${f.selector}=${f.value}`).join("|");
+}
+
+/**
+ * Performs an auto-save if form fields have changed since the last auto-save.
+ */
+async function performAutoSave() {
+  const fields = captureFields();
+
+  if (fields.length === 0) {
+    return;
+  }
+
+  const currentHash = hashFieldValues(fields);
+  if (currentHash === lastAutoSaveHash) {
+    return;
+  }
+
+  lastAutoSaveHash = currentHash;
+
+  const snapshot = {
+    id: crypto.randomUUID(),
+    url: window.location.href,
+    title: document.title || window.location.hostname,
+    timestamp: Date.now(),
+    fields,
+    source: "auto",
+  };
+
+  await browser.runtime.sendMessage({
+    action: "saveAutoSnapshot",
+    payload: { snapshot },
+  });
+}
+
+/**
+ * Starts the auto-save timer at the given interval.
+ */
+function startAutoSave(intervalSeconds) {
+  stopAutoSave();
+
+  // Only start if there are form fields on the page
+  if (detectFields().length === 0) {
+    return;
+  }
+
+  autoSaveTimer = setInterval(performAutoSave, intervalSeconds * 1000);
+}
+
+/**
+ * Stops the auto-save timer.
+ */
+function stopAutoSave() {
+  if (autoSaveTimer) {
+    clearInterval(autoSaveTimer);
+    autoSaveTimer = null;
+  }
+}
+
+/**
+ * Initializes auto-save based on current settings.
+ */
+async function initAutoSave() {
+  const settings = await browser.runtime.sendMessage({
+    action: "getSettings",
+    payload: {},
+  });
+
+  if (settings.autoSave) {
+    startAutoSave(settings.autoSaveInterval);
+  }
+}
+
 // Listen for messages from background/popup
 browser.runtime.onMessage.addListener(handleMessage);
+
+// React to settings changes without requiring page reload
+browser.storage.onChanged.addListener((changes) => {
+  if (changes.recall_settings) {
+    const settings = changes.recall_settings.newValue;
+    if (settings && settings.autoSave) {
+      startAutoSave(settings.autoSaveInterval);
+    } else {
+      stopAutoSave();
+    }
+  }
+});
+
+// Initialize auto-save on page load
+initAutoSave();
