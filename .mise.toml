@@ -1,0 +1,5 @@
+# ABOUTME: Mise configuration for the Recall browser extension.
+# ABOUTME: Manages Node.js version for consistent development environments.
+
+[tools]
+node = "22"
