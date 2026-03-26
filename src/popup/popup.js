@@ -8,6 +8,9 @@ const snapshotListEl = document.getElementById("snapshot-list");
 const emptyStateEl = document.getElementById("empty-state");
 const saveBtnEl = document.getElementById("save-btn");
 const settingsBtnEl = document.getElementById("settings-btn");
+const viewAllBtnEl = document.getElementById("view-all-btn");
+
+let viewingAll = false;
 
 /**
  * Gets the current active tab.
@@ -31,9 +34,20 @@ function formatTime(timestamp) {
 }
 
 /**
- * Renders a single snapshot card.
+ * Truncates a URL for display purposes.
  */
-function renderSnapshotCard(snapshot) {
+function truncateUrl(url, maxLength = 40) {
+  if (url.length <= maxLength) {
+    return url;
+  }
+  return url.substring(0, maxLength) + "...";
+}
+
+/**
+ * Renders a single snapshot card.
+ * When showUrl is true, displays the URL the snapshot belongs to.
+ */
+function renderSnapshotCard(snapshot, { showUrl = false } = {}) {
   const card = document.createElement("div");
   card.className = "snapshot-card";
 
@@ -42,7 +56,12 @@ function renderSnapshotCard(snapshot) {
       ? "snapshot-card__badge--auto"
       : "snapshot-card__badge--manual";
 
+  const urlHtml = showUrl
+    ? `<div class="snapshot-card__url" title="${snapshot.url}">${truncateUrl(snapshot.url)}</div>`
+    : "";
+
   card.innerHTML = `
+    ${urlHtml}
     <div class="snapshot-card__header">
       <span class="snapshot-card__time">${formatTime(snapshot.timestamp)}</span>
       <span class="snapshot-card__badge ${badgeClass}">${snapshot.source}</span>
@@ -81,12 +100,15 @@ function renderSnapshotCard(snapshot) {
 
   // Delete action
   card.querySelector('[data-action="delete"]').addEventListener("click", async () => {
-    const tab = await getCurrentTab();
     await browser.runtime.sendMessage({
       action: "deleteSnapshot",
-      payload: { url: tab.url, snapshotId: snapshot.id, tabId: tab.id },
+      payload: { url: snapshot.url, snapshotId: snapshot.id },
     });
-    await loadSnapshots();
+    if (viewingAll) {
+      await loadAllSnapshots();
+    } else {
+      await loadSnapshots();
+    }
   });
 
   return card;
@@ -96,6 +118,10 @@ function renderSnapshotCard(snapshot) {
  * Loads and renders snapshots for the current page.
  */
 async function loadSnapshots() {
+  viewingAll = false;
+  viewAllBtnEl.classList.remove("header__btn--active");
+  saveBtnEl.hidden = false;
+
   const tab = await getCurrentTab();
   const snapshots = await browser.runtime.sendMessage({
     action: "getSnapshots",
@@ -106,6 +132,7 @@ async function loadSnapshots() {
 
   if (!snapshots || snapshots.length === 0) {
     emptyStateEl.hidden = false;
+    emptyStateEl.querySelector("p").textContent = "No saved snapshots for this page.";
     return;
   }
 
@@ -115,6 +142,44 @@ async function loadSnapshots() {
   const sorted = [...snapshots].sort((a, b) => b.timestamp - a.timestamp);
   for (const snapshot of sorted) {
     snapshotListEl.appendChild(renderSnapshotCard(snapshot));
+  }
+}
+
+/**
+ * Loads and renders all snapshots across all URLs.
+ */
+async function loadAllSnapshots() {
+  viewingAll = true;
+  viewAllBtnEl.classList.add("header__btn--active");
+  saveBtnEl.hidden = true;
+
+  const allSnapshots = await browser.runtime.sendMessage({
+    action: "getAllSnapshots",
+    payload: {},
+  });
+
+  snapshotListEl.innerHTML = "";
+
+  // Flatten all snapshots from all URLs into a single array
+  const flatSnapshots = [];
+  for (const [url, snapshots] of Object.entries(allSnapshots)) {
+    for (const snapshot of snapshots) {
+      flatSnapshots.push({ ...snapshot, url });
+    }
+  }
+
+  if (flatSnapshots.length === 0) {
+    emptyStateEl.hidden = false;
+    emptyStateEl.querySelector("p").textContent = "No saved snapshots anywhere.";
+    return;
+  }
+
+  emptyStateEl.hidden = true;
+
+  // Show most recent first, with URL visible
+  const sorted = flatSnapshots.sort((a, b) => b.timestamp - a.timestamp);
+  for (const snapshot of sorted) {
+    snapshotListEl.appendChild(renderSnapshotCard(snapshot, { showUrl: true }));
   }
 }
 
@@ -132,6 +197,15 @@ saveBtnEl.addEventListener("click", async () => {
   }
 
   await loadSnapshots();
+});
+
+// View all button: toggle between current page and all pages
+viewAllBtnEl.addEventListener("click", () => {
+  if (viewingAll) {
+    loadSnapshots();
+  } else {
+    loadAllSnapshots();
+  }
 });
 
 // Settings button: open options page

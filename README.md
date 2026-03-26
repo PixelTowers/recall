@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icons/recall-logo.png" alt="Recall" width="200">
+</p>
+
 # Recall
 
 A browser extension for Chrome and Firefox that saves, restores, and exports form data so you never lose what you've typed.
