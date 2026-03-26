@@ -174,13 +174,14 @@ function startAutoSave(intervalSeconds) {
 }
 
 /**
- * Stops the auto-save timer.
+ * Stops the auto-save timer and resets change tracking.
  */
 function stopAutoSave() {
   if (autoSaveTimer) {
     clearInterval(autoSaveTimer);
     autoSaveTimer = null;
   }
+  lastAutoSaveHash = null;
 }
 
 /**
