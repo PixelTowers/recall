@@ -8,6 +8,7 @@ import {
   saveSnapshot,
   saveAutoSnapshot,
   deleteSnapshot,
+  deleteAllAutoSnapshots,
   getSettings,
   saveSettings,
 } from "./lib/storage.js";
@@ -82,12 +83,26 @@ async function handleMessage(message, sender) {
       return { success: removed };
     }
 
+    case "getAllSnapshots": {
+      return await getAllSnapshots();
+    }
+
+    case "deleteAllAutoSnapshots": {
+      const count = await deleteAllAutoSnapshots();
+      return { success: true, removed: count };
+    }
+
     case "getSettings": {
       return await getSettings();
     }
 
     case "saveSettings": {
-      return await saveSettings(payload.settings);
+      const saved = await saveSettings(payload.settings);
+      // When auto-save is disabled, clean up all existing auto-save entries
+      if (saved.autoSave === false) {
+        await deleteAllAutoSnapshots();
+      }
+      return saved;
     }
 
     case "updateBadge": {

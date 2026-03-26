@@ -30,6 +30,7 @@ import {
   saveSnapshot,
   saveAutoSnapshot,
   deleteSnapshot,
+  deleteAllAutoSnapshots,
   getSettings,
   saveSettings,
 } from "../src/lib/storage.js";
@@ -216,6 +217,48 @@ describe("saveAutoSnapshot", () => {
     expect(snapshots.find((s) => s.id === "manual-1")).toBeDefined();
     expect(snapshots.find((s) => s.id === "auto-new")).toBeDefined();
     expect(snapshots.find((s) => s.id === "auto-old")).toBeUndefined();
+  });
+});
+
+describe("deleteAllAutoSnapshots", () => {
+  beforeEach(clearStore);
+
+  it("removes all auto-save snapshots across all URLs", async () => {
+    store.recall_snapshots = {
+      "https://a.com/form": [
+        makeSnapshot({ id: "a-manual", source: "manual", url: "https://a.com/form" }),
+        makeSnapshot({ id: "a-auto", source: "auto", url: "https://a.com/form" }),
+      ],
+      "https://b.com/form": [
+        makeSnapshot({ id: "b-auto", source: "auto", url: "https://b.com/form" }),
+      ],
+    };
+
+    const removed = await deleteAllAutoSnapshots();
+
+    expect(removed).toBe(2);
+    expect(store.recall_snapshots["https://a.com/form"]).toHaveLength(1);
+    expect(store.recall_snapshots["https://a.com/form"][0].id).toBe("a-manual");
+    expect(store.recall_snapshots["https://b.com/form"]).toBeUndefined();
+  });
+
+  it("preserves all manual snapshots", async () => {
+    store.recall_snapshots = {
+      "https://a.com/form": [
+        makeSnapshot({ id: "m1", source: "manual" }),
+        makeSnapshot({ id: "m2", source: "manual" }),
+      ],
+    };
+
+    const removed = await deleteAllAutoSnapshots();
+
+    expect(removed).toBe(0);
+    expect(store.recall_snapshots["https://a.com/form"]).toHaveLength(2);
+  });
+
+  it("returns 0 when no auto-saves exist", async () => {
+    const removed = await deleteAllAutoSnapshots();
+    expect(removed).toBe(0);
   });
 });
 

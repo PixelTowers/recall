@@ -106,6 +106,29 @@ export async function saveAutoSnapshot(snapshot) {
 }
 
 /**
+ * Removes all auto-save snapshots across all URLs.
+ * Manual snapshots are never affected.
+ * Returns the number of auto-saves removed.
+ */
+export async function deleteAllAutoSnapshots() {
+  const all = await getAllSnapshots();
+  let removed = 0;
+
+  for (const url of Object.keys(all)) {
+    const before = all[url].length;
+    all[url] = all[url].filter((s) => s.source !== "auto");
+    removed += before - all[url].length;
+
+    if (all[url].length === 0) {
+      delete all[url];
+    }
+  }
+
+  await browser.storage.local.set({ [SNAPSHOTS_KEY]: all });
+  return removed;
+}
+
+/**
  * Returns the current settings, merged with defaults.
  */
 export async function getSettings() {
