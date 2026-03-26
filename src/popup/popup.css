@@ -34,7 +34,12 @@ body {
   color: #4A90D9;
 }
 
-.header__settings {
+.header__actions {
+  display: flex;
+  gap: 4px;
+}
+
+.header__btn {
   background: none;
   border: none;
   font-size: 20px;
@@ -44,9 +49,14 @@ body {
   border-radius: 4px;
 }
 
-.header__settings:hover {
+.header__btn:hover {
   color: #4A90D9;
   background: #f0f4f8;
+}
+
+.header__btn--active {
+  color: #4A90D9;
+  background: #e8f0fe;
 }
 
 .save-btn {
@@ -172,8 +182,35 @@ body {
   background: #e6f9eb;
 }
 
+.snapshot-card__url {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .empty-state {
   text-align: center;
   padding: 24px 12px;
   color: #999;
+}
+
+.footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+}
+
+.footer a {
+  color: #4A90D9;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }

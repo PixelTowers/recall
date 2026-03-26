@@ -3,6 +3,7 @@
 
 import browser from "webextension-polyfill";
 import {
+  getAllSnapshots,
   getSnapshots,
   saveSnapshot,
   saveAutoSnapshot,
@@ -47,6 +48,10 @@ async function handleMessage(message, sender) {
   switch (action) {
     case "getSnapshots": {
       return await getSnapshots(payload.url);
+    }
+
+    case "getAllSnapshots": {
+      return await getAllSnapshots();
     }
 
     case "saveSnapshot": {
