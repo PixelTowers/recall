@@ -50,14 +50,18 @@ function generateManifest(target) {
       type: "module",
     };
 
-    // Firefox requires browser_specific_settings for extension ID
+    // Firefox requires browser_specific_settings for extension ID and data collection
     base.browser_specific_settings = {
       gecko: {
         id: "recall@pixeltowers.com",
         strict_min_version: "112.0",
+        data_collection_permissions: {
+          required: [],
+          optional: [],
+        },
       },
       gecko_android: {
-        strict_min_version: "112.0",
+        strict_min_version: "113.0",
       },
     };
   }
