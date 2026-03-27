@@ -58,7 +58,7 @@ jobs:
 
       - name: Send Discord notification
         env:
-          WEBHOOK_URL: ${{ secrets.DISCORD_RECALL_WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           COMMIT_SHA="${{ github.sha }}"
           SHORT_SHA="${COMMIT_SHA:0:7}"
