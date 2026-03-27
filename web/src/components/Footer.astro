@@ -1,6 +1,6 @@
 ---
-// ABOUTME: Footer with links, credits, and animated emoji.
-// ABOUTME: Uses the same emoji cycling pattern as the extension.
+// ABOUTME: Footer with links, credits, and Lucide heart icon.
+// ABOUTME: Clean layout with product, company, and legal sections.
 ---
 
 <footer class="px-6 py-12 bg-gray-950 text-gray-100 border-t border-gray-800">
@@ -46,44 +46,10 @@
     <div class="border-t border-gray-800 pt-8">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
         <p>&copy; {new Date().getFullYear()} Recall. All rights reserved.</p>
-        <p>
-          Made with <span class="footer-emoji" data-footer-emoji aria-label="love">&#x2764;&#xFE0F;</span> by <a href="https://pixeltowers.io" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-gray-100 underline transition-colors">PixelTowers</a>
+        <p class="flex items-center gap-1">
+          Made with <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="text-red-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> by <a href="https://pixeltowers.io" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-gray-100 underline transition-colors">PixelTowers</a>
         </p>
       </div>
     </div>
   </div>
 </footer>
-
-<style>
-  .footer-emoji {
-    display: inline-block;
-    font-size: 0.875rem;
-    line-height: 1;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-
-  .footer-emoji.swapping {
-    opacity: 0;
-    transform: scale(0.5) rotate(-30deg);
-  }
-</style>
-
-<script>
-  function initFooterEmoji() {
-    const emojiEl = document.querySelector('[data-footer-emoji]')
-    if (emojiEl) {
-      const emojis = ['\u2764\uFE0F', '\u2615', '\u{1F950}', '\u{1F4AA}', '\u{1F370}', '\u{1F3B5}', '\u{1F33B}', '\u{1F436}']
-      let idx = 0
-      setInterval(() => {
-        emojiEl.classList.add('swapping')
-        setTimeout(() => {
-          idx = (idx + 1) % emojis.length
-          emojiEl.textContent = emojis[idx]
-          emojiEl.classList.remove('swapping')
-        }, 250)
-      }, 2000)
-    }
-  }
-
-  initFooterEmoji()
-</script>

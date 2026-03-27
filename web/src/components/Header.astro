@@ -7,7 +7,7 @@
   <div class="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
     <!-- Logo -->
     <a href="/" class="flex items-center gap-2 text-gray-900 dark:text-gray-50">
-      <img src="/favicon.ico" alt="Recall" class="h-8 w-8" />
+      <img src="/recall-logo.png" alt="Recall" class="h-8 w-8" />
       <span class="text-lg font-semibold">Recall</span>
     </a>
 
@@ -22,8 +22,9 @@
 
     <!-- Desktop CTA + Dark Mode Toggle -->
     <div class="hidden md:flex items-center gap-4">
-      <button id="dark-mode-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle dark mode">
-        <span id="dark-mode-icon">🌙</span>
+      <button id="dark-mode-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-400" aria-label="Toggle dark mode">
+        <svg id="dark-mode-icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg id="dark-mode-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
       </button>
       <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="px-6 py-2 rounded-lg bg-blue-700 font-medium hover:bg-blue-800 transition-colors" style="color: #ffffff;">
         Install
@@ -31,8 +32,8 @@
     </div>
 
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-btn" class="md:hidden text-gray-900 dark:text-gray-50 text-2xl" aria-label="Toggle menu">
-      ☰
+    <button id="mobile-menu-btn" class="md:hidden text-gray-900 dark:text-gray-50" aria-label="Toggle menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
     </button>
   </div>
 
@@ -44,8 +45,10 @@
       <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">
         GitHub
       </a>
-      <button id="dark-mode-toggle-mobile" class="w-full text-left text-gray-600 dark:text-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-        <span id="dark-mode-icon-mobile">🌙</span> Dark Mode
+      <button id="dark-mode-toggle-mobile" class="w-full text-left text-gray-600 dark:text-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-2">
+        <svg id="dark-mode-icon-moon-mobile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg id="dark-mode-icon-sun-mobile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        Dark Mode
       </button>
       <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="block w-full px-4 py-2 rounded-lg bg-blue-700 font-medium hover:bg-blue-800 transition-colors text-center" style="color: #ffffff;">
         Install
@@ -59,19 +62,24 @@
     const html = document.documentElement
     const darkModeToggle = document.getElementById('dark-mode-toggle')
     const darkModeToggleMobile = document.getElementById('dark-mode-toggle-mobile')
-    const darkModeIcon = document.getElementById('dark-mode-icon')
-    const darkModeIconMobile = document.getElementById('dark-mode-icon-mobile')
+    const moonIcon = document.getElementById('dark-mode-icon-moon')
+    const sunIcon = document.getElementById('dark-mode-icon-sun')
+    const moonIconMobile = document.getElementById('dark-mode-icon-moon-mobile')
+    const sunIconMobile = document.getElementById('dark-mode-icon-sun-mobile')
 
-    if (html.classList.contains('dark')) {
-      if (darkModeIcon) darkModeIcon.textContent = '☀️'
-      if (darkModeIconMobile) darkModeIconMobile.textContent = '☀️'
+    const updateIcons = (isDark: boolean) => {
+      moonIcon?.classList.toggle('hidden', isDark)
+      sunIcon?.classList.toggle('hidden', !isDark)
+      moonIconMobile?.classList.toggle('hidden', isDark)
+      sunIconMobile?.classList.toggle('hidden', !isDark)
     }
+
+    updateIcons(html.classList.contains('dark'))
 
     const toggleDarkMode = () => {
       const isDarkNow = html.classList.toggle('dark')
-      localStorage.setItem('darkMode', isDarkNow)
-      if (darkModeIcon) darkModeIcon.textContent = isDarkNow ? '☀️' : '🌙'
-      if (darkModeIconMobile) darkModeIconMobile.textContent = isDarkNow ? '☀️' : '🌙'
+      localStorage.setItem('darkMode', isDarkNow.toString())
+      updateIcons(isDarkNow)
     }
 
     darkModeToggle?.addEventListener('click', toggleDarkMode)
