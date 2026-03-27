@@ -1,69 +1,12 @@
 /* ABOUTME: Global styles and Tailwind CSS v4 theme for Recall marketing site. */
-/* ABOUTME: Defines brand colors, typography, and responsive utilities. */
+/* ABOUTME: Defines brand colors, typography, dark mode, and responsive utilities. */
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  /* Brand colors */
-  --color-brand: #4A90D9;
-  --color-brand-dark: #3a7bc8;
-  --color-brand-light: #e8f0fe;
-
-  /* Semantic colors */
-  --color-bg: #ffffff;
-  --color-bg-alt: #f5f5f5;
-  --color-text: #333333;
-  --color-text-secondary: #666666;
-  --color-muted: #999999;
-  --color-border: #e0e0e0;
-  --color-success: #28a745;
-  --color-danger: #dc3545;
-
-  /* Fonts */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Custom utility classes using CSS variables */
-@layer utilities {
-  .bg-bg {
-    @apply bg-white;
-  }
-  .bg-bg-alt {
-    @apply bg-gray-50;
-  }
-  .text-text {
-    @apply text-gray-900;
-  }
-  .text-text-secondary {
-    @apply text-gray-600;
-  }
-  .text-muted {
-    @apply text-gray-500;
-  }
-  .border-border {
-    @apply border-gray-200;
-  }
-  .text-brand {
-    @apply text-blue-600;
-  }
-  .bg-brand {
-    @apply bg-blue-600;
-  }
-  .hover\:bg-brand-dark:hover {
-    @apply hover:bg-blue-700;
-  }
-  .hover\:text-brand-dark:hover {
-    @apply hover:text-blue-700;
-  }
-  .bg-brand-light {
-    @apply bg-blue-50;
-  }
-  .hover\:bg-brand-light:hover {
-    @apply hover:bg-blue-50;
-  }
-  .border-brand {
-    @apply border-blue-600;
-  }
 }
 
 /* Smooth scrolling */
@@ -71,14 +14,15 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Base link styles */
-a {
-  @apply text-brand hover:text-blue-700 transition-colors;
+body {
+  font-family: var(--font-sans);
 }
 
-/* Button base styles */
-button {
-  @apply transition-colors;
+/* Reset default link styles — components set their own */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s;
 }
 
 /* Animation for fade-in on scroll */

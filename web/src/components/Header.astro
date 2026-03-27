@@ -1,47 +1,53 @@
 ---
-// ABOUTME: Sticky navigation header with logo, nav links, and install CTA.
+// ABOUTME: Sticky navigation header with logo, nav links, install CTA, and dark mode toggle.
 // ABOUTME: Mobile-responsive with hamburger menu and GitHub link.
 ---
 
-<header class="fixed top-0 z-50 w-full border-b border-border bg-bg/80 backdrop-blur-md">
+<header class="fixed top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-gray-100/80 dark:bg-gray-950/80 backdrop-blur-md">
   <div class="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-2">
+    <a href="/" class="flex items-center gap-2 text-gray-900 dark:text-gray-50">
       <img src="/favicon.ico" alt="Recall" class="h-8 w-8" />
-      <span class="text-lg font-semibold text-text">Recall</span>
+      <span class="text-lg font-semibold">Recall</span>
     </a>
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-8">
-      <a href="#features" class="text-text-secondary hover:text-text transition-colors">Features</a>
-      <a href="#privacy" class="text-text-secondary hover:text-text transition-colors">Privacy</a>
-      <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="text-text-secondary hover:text-text transition-colors">
+      <a href="#features" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">Features</a>
+      <a href="#privacy" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">Privacy</a>
+      <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">
         GitHub
       </a>
     </nav>
 
-    <!-- Desktop CTA -->
+    <!-- Desktop CTA + Dark Mode Toggle -->
     <div class="hidden md:flex items-center gap-4">
-      <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-brand text-white font-medium hover:bg-brand-dark transition-colors">
+      <button id="dark-mode-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle dark mode">
+        <span id="dark-mode-icon">🌙</span>
+      </button>
+      <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="px-6 py-2 rounded-lg bg-blue-700 font-medium hover:bg-blue-800 transition-colors" style="color: #ffffff;">
         Install
       </a>
     </div>
 
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-btn" class="md:hidden text-text text-2xl" aria-label="Toggle menu">
+    <button id="mobile-menu-btn" class="md:hidden text-gray-900 dark:text-gray-50 text-2xl" aria-label="Toggle menu">
       ☰
     </button>
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-border bg-bg">
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-950">
     <nav class="px-6 py-4 space-y-4">
-      <a href="#features" class="block text-text-secondary hover:text-text transition-colors">Features</a>
-      <a href="#privacy" class="block text-text-secondary hover:text-text transition-colors">Privacy</a>
-      <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="block text-text-secondary hover:text-text transition-colors">
+      <a href="#features" class="block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">Features</a>
+      <a href="#privacy" class="block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">Privacy</a>
+      <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors">
         GitHub
       </a>
-      <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="block w-full px-4 py-2 rounded-lg bg-brand text-white font-medium hover:bg-brand-dark transition-colors text-center">
+      <button id="dark-mode-toggle-mobile" class="w-full text-left text-gray-600 dark:text-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <span id="dark-mode-icon-mobile">🌙</span> Dark Mode
+      </button>
+      <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="block w-full px-4 py-2 rounded-lg bg-blue-700 font-medium hover:bg-blue-800 transition-colors text-center" style="color: #ffffff;">
         Install
       </a>
     </nav>
@@ -49,6 +55,29 @@
 </header>
 
 <script>
+  function initDarkMode() {
+    const html = document.documentElement
+    const darkModeToggle = document.getElementById('dark-mode-toggle')
+    const darkModeToggleMobile = document.getElementById('dark-mode-toggle-mobile')
+    const darkModeIcon = document.getElementById('dark-mode-icon')
+    const darkModeIconMobile = document.getElementById('dark-mode-icon-mobile')
+
+    if (html.classList.contains('dark')) {
+      if (darkModeIcon) darkModeIcon.textContent = '☀️'
+      if (darkModeIconMobile) darkModeIconMobile.textContent = '☀️'
+    }
+
+    const toggleDarkMode = () => {
+      const isDarkNow = html.classList.toggle('dark')
+      localStorage.setItem('darkMode', isDarkNow)
+      if (darkModeIcon) darkModeIcon.textContent = isDarkNow ? '☀️' : '🌙'
+      if (darkModeIconMobile) darkModeIconMobile.textContent = isDarkNow ? '☀️' : '🌙'
+    }
+
+    darkModeToggle?.addEventListener('click', toggleDarkMode)
+    darkModeToggleMobile?.addEventListener('click', toggleDarkMode)
+  }
+
   const mobileMenuBtn = document.getElementById('mobile-menu-btn')
   const mobileMenu = document.getElementById('mobile-menu')
 
@@ -56,10 +85,11 @@
     mobileMenu?.classList.toggle('hidden')
   })
 
-  // Close menu when clicking a link
   mobileMenu?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       mobileMenu.classList.add('hidden')
     })
   })
+
+  initDarkMode()
 </script>

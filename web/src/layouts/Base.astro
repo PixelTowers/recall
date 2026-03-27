@@ -60,15 +60,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
       url: Astro.site,
     })}></script>
 
+    <!-- Detect dark mode before first paint -->
+    <script is:inline>
+      if (localStorage.getItem('darkMode') === 'true' ||
+          (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      }
+    </script>
+
     <title>{title}</title>
   </head>
-  <body class="min-h-screen bg-bg text-text antialiased">
+  <body class="min-h-screen bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-50 antialiased">
     <slot />
   </body>
 </html>
-
-<style is:global>
-  body {
-    font-family: var(--font-sans);
-  }
-</style>
