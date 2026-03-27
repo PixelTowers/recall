@@ -51,28 +51,66 @@ function renderSnapshotCard(snapshot, { showUrl = false } = {}) {
   const card = document.createElement("div");
   card.className = "snapshot-card";
 
+  // Add URL section if viewing all snapshots
+  if (showUrl) {
+    const urlDiv = document.createElement("div");
+    urlDiv.className = "snapshot-card__url";
+    urlDiv.title = snapshot.url;
+    urlDiv.textContent = truncateUrl(snapshot.url);
+    card.appendChild(urlDiv);
+  }
+
+  // Header section
+  const header = document.createElement("div");
+  header.className = "snapshot-card__header";
+
+  const timeSpan = document.createElement("span");
+  timeSpan.className = "snapshot-card__time";
+  timeSpan.textContent = formatTime(snapshot.timestamp);
+  header.appendChild(timeSpan);
+
   const badgeClass =
     snapshot.source === "auto"
       ? "snapshot-card__badge--auto"
       : "snapshot-card__badge--manual";
 
-  const urlHtml = showUrl
-    ? `<div class="snapshot-card__url" title="${snapshot.url}">${truncateUrl(snapshot.url)}</div>`
-    : "";
+  const badgeSpan = document.createElement("span");
+  badgeSpan.className = `snapshot-card__badge ${badgeClass}`;
+  badgeSpan.textContent = snapshot.source;
+  header.appendChild(badgeSpan);
 
-  card.innerHTML = `
-    ${urlHtml}
-    <div class="snapshot-card__header">
-      <span class="snapshot-card__time">${formatTime(snapshot.timestamp)}</span>
-      <span class="snapshot-card__badge ${badgeClass}">${snapshot.source}</span>
-    </div>
-    <div class="snapshot-card__fields">${snapshot.fields.length} field(s)</div>
-    <div class="snapshot-card__actions">
-      <button class="snapshot-card__action snapshot-card__action--restore" data-action="restore">Restore</button>
-      <button class="snapshot-card__action snapshot-card__action--export" data-action="export">Export</button>
-      <button class="snapshot-card__action snapshot-card__action--delete" data-action="delete">Delete</button>
-    </div>
-  `;
+  card.appendChild(header);
+
+  // Fields section
+  const fieldsDiv = document.createElement("div");
+  fieldsDiv.className = "snapshot-card__fields";
+  fieldsDiv.textContent = `${snapshot.fields.length} field(s)`;
+  card.appendChild(fieldsDiv);
+
+  // Actions section
+  const actionsDiv = document.createElement("div");
+  actionsDiv.className = "snapshot-card__actions";
+
+  const restoreBtn = document.createElement("button");
+  restoreBtn.className = "snapshot-card__action snapshot-card__action--restore";
+  restoreBtn.textContent = "Restore";
+  restoreBtn.setAttribute("data-action", "restore");
+
+  const exportBtn = document.createElement("button");
+  exportBtn.className = "snapshot-card__action snapshot-card__action--export";
+  exportBtn.textContent = "Export";
+  exportBtn.setAttribute("data-action", "export");
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "snapshot-card__action snapshot-card__action--delete";
+  deleteBtn.textContent = "Delete";
+  deleteBtn.setAttribute("data-action", "delete");
+
+  actionsDiv.appendChild(restoreBtn);
+  actionsDiv.appendChild(exportBtn);
+  actionsDiv.appendChild(deleteBtn);
+
+  card.appendChild(actionsDiv);
 
   // Restore action
   card.querySelector('[data-action="restore"]').addEventListener("click", async () => {
