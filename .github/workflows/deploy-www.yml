@@ -1,0 +1,81 @@
+# ABOUTME: Deploys the Recall marketing site (Astro) to Cloudflare Pages on push to main.
+# ABOUTME: Only triggers when web/** files change. Notifies Discord on completion.
+
+name: Deploy Marketing Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Build
+        run: npm run build
+        working-directory: web
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy web/dist --project-name=recall-www --commit-dirty=true
+
+  notify:
+    needs: deploy
+    if: always()
+    runs-on: self-hosted
+
+    steps:
+      - name: Determine status
+        id: status
+        run: |
+          if [[ "${{ needs.deploy.result }}" == "success" ]]; then
+            echo "color=3066993" >> "$GITHUB_OUTPUT"
+            echo "title=🌐 Marketing site deployed to Cloudflare Pages" >> "$GITHUB_OUTPUT"
+          else
+            echo "color=15158332" >> "$GITHUB_OUTPUT"
+            echo "title=🔴 Marketing site deploy failed" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Send Discord notification
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_RECALL_WEBHOOK_URL }}
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          COMMIT_URL="${{ github.server_url }}/${{ github.repository }}/commit/${COMMIT_SHA}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" -d @- <<PAYLOAD
+          {
+            "username": "GitHub",
+            "embeds": [{
+              "title": "${{ steps.status.outputs.title }}",
+              "url": "${RUN_URL}",
+              "color": ${{ steps.status.outputs.color }},
+              "fields": [
+                { "name": "Commit", "value": "[\`${SHORT_SHA}\`](${COMMIT_URL})", "inline": true },
+                { "name": "Author", "value": "${{ github.actor }}", "inline": true },
+                { "name": "Workflow", "value": "[View logs](${RUN_URL})", "inline": false }
+              ]
+            }]
+          }
+          PAYLOAD

@@ -1,0 +1,65 @@
+---
+// ABOUTME: Sticky navigation header with logo, nav links, and install CTA.
+// ABOUTME: Mobile-responsive with hamburger menu and GitHub link.
+---
+
+<header class="fixed top-0 z-50 w-full border-b border-border bg-bg/80 backdrop-blur-md">
+  <div class="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2">
+      <img src="/favicon.ico" alt="Recall" class="h-8 w-8" />
+      <span class="text-lg font-semibold text-text">Recall</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8">
+      <a href="#features" class="text-text-secondary hover:text-text transition-colors">Features</a>
+      <a href="#privacy" class="text-text-secondary hover:text-text transition-colors">Privacy</a>
+      <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="text-text-secondary hover:text-text transition-colors">
+        GitHub
+      </a>
+    </nav>
+
+    <!-- Desktop CTA -->
+    <div class="hidden md:flex items-center gap-4">
+      <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-brand text-white font-medium hover:bg-brand-dark transition-colors">
+        Install
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden text-text text-2xl" aria-label="Toggle menu">
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-border bg-bg">
+    <nav class="px-6 py-4 space-y-4">
+      <a href="#features" class="block text-text-secondary hover:text-text transition-colors">Features</a>
+      <a href="#privacy" class="block text-text-secondary hover:text-text transition-colors">Privacy</a>
+      <a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="block text-text-secondary hover:text-text transition-colors">
+        GitHub
+      </a>
+      <a href="https://github.com/PixelTowers/recall/releases" target="_blank" rel="noopener noreferrer" class="block w-full px-4 py-2 rounded-lg bg-brand text-white font-medium hover:bg-brand-dark transition-colors text-center">
+        Install
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn')
+  const mobileMenu = document.getElementById('mobile-menu')
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden')
+  })
+
+  // Close menu when clicking a link
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden')
+    })
+  })
+</script>

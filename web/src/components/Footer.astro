@@ -1,0 +1,89 @@
+---
+// ABOUTME: Footer with links, credits, and animated emoji.
+// ABOUTME: Uses the same emoji cycling pattern as the extension.
+---
+
+<footer class="px-6 py-12 bg-text text-white border-t border-border">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-8">
+      <!-- Brand -->
+      <div>
+        <h3 class="font-semibold mb-4 text-lg">Recall</h3>
+        <p class="text-gray-300 text-sm">
+          Never lose your form data again. Save, restore, and export with one click.
+        </p>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <h4 class="font-semibold mb-4">Product</h4>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+          <li><a href="#privacy" class="hover:text-white transition-colors">Privacy</a></li>
+          <li><a href="https://github.com/PixelTowers/recall" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 class="font-semibold mb-4">Company</h4>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li><a href="https://pixeltowers.io" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">PixelTowers</a></li>
+          <li><a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h4 class="font-semibold mb-4">Legal</h4>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li><a href="https://github.com/PixelTowers/recall/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">MIT License</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-700 pt-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-300">
+        <p>&copy; {new Date().getFullYear()} Recall. All rights reserved.</p>
+        <p>
+          Made with <span class="footer-emoji" data-footer-emoji aria-label="love">&#x2764;&#xFE0F;</span> by <a href="https://pixeltowers.io" target="_blank" rel="noopener noreferrer" class="text-white hover:underline">PixelTowers</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-emoji {
+    display: inline-block;
+    font-size: 0.875rem;
+    line-height: 1;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .footer-emoji.swapping {
+    opacity: 0;
+    transform: scale(0.5) rotate(-30deg);
+  }
+</style>
+
+<script>
+  function initFooterEmoji() {
+    const emojiEl = document.querySelector('[data-footer-emoji]')
+    if (emojiEl) {
+      const emojis = ['\u2764\uFE0F', '\u2615', '\u{1F950}', '\u{1F4AA}', '\u{1F370}', '\u{1F3B5}', '\u{1F33B}', '\u{1F436}']
+      let idx = 0
+      setInterval(() => {
+        emojiEl.classList.add('swapping')
+        setTimeout(() => {
+          idx = (idx + 1) % emojis.length
+          emojiEl.textContent = emojis[idx]
+          emojiEl.classList.remove('swapping')
+        }, 250)
+      }, 2000)
+    }
+  }
+
+  initFooterEmoji()
+</script>

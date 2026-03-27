@@ -1,0 +1,67 @@
+---
+// ABOUTME: Privacy policy page using the Legal layout.
+// ABOUTME: Content is inline for the marketing site (full policy also at root/PRIVACY_POLICY.md).
+
+import Legal from '../layouts/Legal.astro'
+---
+
+<Legal title="Privacy Policy">
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Overview</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    Recall is a browser extension that saves, restores, and exports form data locally on your device. We take your privacy
+    seriously and have designed Recall with privacy as a core principle.
+  </p>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Data Collection and Storage</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    <strong>Recall stores all data locally in your browser's storage.</strong> We do not:
+  </p>
+  <ul class="mb-4 ml-6 space-y-2 text-gray-600 list-disc">
+    <li>Send your form data to any server</li>
+    <li>Collect, track, or monitor your form submissions</li>
+    <li>Use cookies for tracking or analytics</li>
+    <li>Require you to create an account or provide an email address</li>
+    <li>Share your data with third parties</li>
+  </ul>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">3. How Your Data Is Stored</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    All form snapshots are stored exclusively in <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">browser.storage.local</code>, which is:
+  </p>
+  <ul class="mb-4 ml-6 space-y-2 text-gray-600 list-disc">
+    <li>Local to your device — never transmitted</li>
+    <li>Encrypted by your browser</li>
+    <li>Deleted when you clear your browser's local storage or uninstall the extension</li>
+  </ul>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Extension Permissions</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    Recall uses only the minimum necessary permissions:
+  </p>
+  <ul class="mb-4 ml-6 space-y-2 text-gray-600 list-disc">
+    <li><code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">storage</code> — to save and restore form data locally</li>
+    <li><code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">activeTab</code> — to detect and interact with forms on the current page</li>
+  </ul>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">5. Third-Party Services</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    Recall does not use any third-party analytics, tracking, or CDN services. It is completely self-contained.
+  </p>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">6. Open Source</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    Recall is MIT-licensed and open source. You can review the complete source code on{' '}
+    <a href="https://github.com/PixelTowers/recall" target="_blank" class="text-blue-600 hover:text-blue-700">GitHub</a>.
+  </p>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">7. Changes to This Policy</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    We may update this privacy policy periodically. Any changes will be posted on this page with an updated date.
+  </p>
+
+  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">8. Contact</h2>
+  <p class="mb-4 text-gray-600 leading-relaxed">
+    Questions about privacy? Please open an issue on{' '}
+    <a href="https://github.com/PixelTowers/recall/issues" target="_blank" class="text-blue-600 hover:text-blue-700">GitHub</a>.
+  </p>
+</Legal>
