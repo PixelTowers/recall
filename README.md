@@ -6,6 +6,16 @@
 
 A browser extension for Chrome and Firefox that saves, restores, and exports form data so you never lose what you've typed.
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/popup-empty.jpg" alt="Recall popup — empty state" width="280">
+  &nbsp;&nbsp;
+  <img src="screenshots/popup-snapshots.jpg" alt="Recall popup — saved snapshots" width="280">
+  &nbsp;&nbsp;
+  <img src="screenshots/settings.jpg" alt="Recall settings — auto-save configuration" width="400">
+</p>
+
 ## The Problem
 
 You're halfway through a long job application, government form, or survey. Your browser crashes, the session times out, or the page auto-reloads. Everything you typed is gone.
