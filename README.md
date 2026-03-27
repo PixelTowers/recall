@@ -145,4 +145,4 @@ All data stays local in `browser.storage.local`. No accounts, no servers, no tra
 
 ## License
 
-MIT
+[MIT](./LICENSE)
