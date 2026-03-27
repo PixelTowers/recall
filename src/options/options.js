@@ -75,5 +75,25 @@ autoSaveInterval.addEventListener("change", () => {
   saveSettings();
 });
 
+/**
+ * Initializes the footer emoji cycling animation.
+ */
+function initFooterEmoji() {
+  const emojiEl = document.querySelector('[data-footer-emoji]');
+  if (emojiEl) {
+    const emojis = ['\u2764\uFE0F', '\u2615', '\u{1F950}', '\u{1F4AA}', '\u{1F370}', '\u{1F3B5}', '\u{1F33B}', '\u{1F436}'];
+    let idx = 0;
+    setInterval(() => {
+      emojiEl.classList.add('swapping');
+      setTimeout(() => {
+        idx = (idx + 1) % emojis.length;
+        emojiEl.textContent = emojis[idx];
+        emojiEl.classList.remove('swapping');
+      }, 250);
+    }, 2000);
+  }
+}
+
 // Load settings on page open
 loadSettings();
+initFooterEmoji();
