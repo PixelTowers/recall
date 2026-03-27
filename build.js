@@ -54,14 +54,14 @@ function generateManifest(target) {
     base.browser_specific_settings = {
       gecko: {
         id: "recall@pixeltowers.com",
-        strict_min_version: "112.0",
+        strict_min_version: "140.0",
         data_collection_permissions: {
-          required: [],
+          required: ["none"],
           optional: [],
         },
       },
       gecko_android: {
-        strict_min_version: "113.0",
+        strict_min_version: "142.0",
       },
     };
   }
