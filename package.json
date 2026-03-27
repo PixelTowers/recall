@@ -1,6 +1,6 @@
 {
   "name": "recall",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Browser extension to save, restore, and export form data",
   "private": true,
   "type": "module",
