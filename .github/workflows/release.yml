@@ -85,53 +85,53 @@ jobs:
           prerelease: ${{ contains(github.ref_name, '-') }}
 
   # ============================================================================
-  # Chrome Web Store Publishing (commented out — uncomment and configure first)
+  # Chrome Web Store Publishing
   # ============================================================================
-  # publish-chrome:
-  #   name: Publish to Chrome Web Store
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-release
-  #   environment: chrome-store
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #
-  #     - name: Download Chrome extension artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: release-artifacts
-  #
-  #     - name: Publish to Chrome Web Store
-  #       uses: mobilefirstllc/cws-publish@latest
-  #       with:
-  #         action: 'publish'
-  #         client_id: ${{ secrets.CHROME_CLIENT_ID }}
-  #         client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-  #         refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-  #         extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
-  #         zip_file: recall-chrome-${{ github.ref_name }}.zip
+  publish-chrome:
+    name: Publish to Chrome Web Store
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    environment: chrome-store
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Chrome extension artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+
+      - name: Publish to Chrome Web Store
+        uses: mobilefirstllc/cws-publish@latest
+        with:
+          action: 'publish'
+          client_id: ${{ secrets.CHROME_CLIENT_ID }}
+          client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+          zip_file: recall-chrome-${{ github.ref_name }}.zip
 
   # ============================================================================
-  # Firefox Add-ons (AMO) Publishing (commented out — uncomment and configure first)
+  # Firefox Add-ons (AMO) Publishing
   # ============================================================================
-  # publish-firefox:
-  #   name: Publish to Firefox Add-ons
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-release
-  #   environment: firefox-store
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #
-  #     - name: Download Firefox extension artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: release-artifacts
-  #
-  #     - name: Sign & Publish to Firefox Add-ons
-  #       uses: kewisch/action-web-ext@v1
-  #       with:
-  #         cmd: sign
-  #         source: recall-firefox-${{ github.ref_name }}.zip
-  #         channel: listed
-  #         apiKey: ${{ secrets.AMO_SIGN_KEY }}
-  #         apiSecret: ${{ secrets.AMO_SIGN_SECRET }}
-  #         releaseNotes: 'Release notes from GitHub'
+  publish-firefox:
+    name: Publish to Firefox Add-ons
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    environment: firefox-store
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Firefox extension artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+
+      - name: Sign & Publish to Firefox Add-ons
+        uses: kewisch/action-web-ext@v1
+        with:
+          cmd: sign
+          source: recall-firefox-${{ github.ref_name }}.zip
+          channel: listed
+          apiKey: ${{ secrets.AMO_SIGN_KEY }}
+          apiSecret: ${{ secrets.AMO_SIGN_SECRET }}
+          releaseNotes: 'Release notes from GitHub'
